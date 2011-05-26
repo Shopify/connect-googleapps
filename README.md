@@ -6,6 +6,8 @@ Google Apps OpenID authentication middleware for Connect/Node.js.
 
 Make sure you are using a session middleware.
 
+    $ npm install connect-googleapps
+
 ```javascript
 connect = require('connect');
 googleAuth = require('connect-googleapps');
