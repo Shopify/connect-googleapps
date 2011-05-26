@@ -1,0 +1,17 @@
+{
+  "name": "connect-googleapps",
+  "description": "Google Apps OpenID auth middleware for Connect",
+  "version": "0.1.0",
+  "contributors": [
+    { "name": "Jonathan Rudenberg", "email": "jonathan@shopify.com" },
+    { "name": "Tobias Lütke", "email": "tobi@shopify.com" }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Shopify/connect-googleapps.git"
+  },
+  "main": "googleapps",
+  "dependencies": {
+     "openid": ">=0.1.8"
+  }
+}
