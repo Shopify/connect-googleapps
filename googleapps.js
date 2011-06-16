@@ -1,6 +1,9 @@
 var openid = require('openid');
-module.exports = function(domain) {
+module.exports = function(domain, options) {
   var oExtensions, oRelyingParty;
+  if (options == null) {
+    options = {};
+  }
   oExtensions = [
     new openid.AttributeExchange({
       'http://axschema.org/contact/email': 'required'
@@ -8,7 +11,7 @@ module.exports = function(domain) {
   ];
   oRelyingParty = new openid.RelyingParty('', null, false, false, oExtensions);
   return function(req, res, next) {
-    oRelyingParty.returnUrl = "http://" + req.headers.host + "/_auth";
+    oRelyingParty.returnUrl = "http" + (options.secure ? 's' : void 0) + "://" + req.headers.host + "/_auth";
     if (req.session.authenticated) {
       return next();
     }

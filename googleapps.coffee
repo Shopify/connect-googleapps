@@ -1,11 +1,11 @@
 openid = require('openid')
 
-module.exports = (domain) ->
+module.exports = (domain, options = {}) ->
   oExtensions = [new openid.AttributeExchange('http://axschema.org/contact/email': 'required')]
   oRelyingParty = new openid.RelyingParty('', null, false, false, oExtensions)
 
   return (req, res, next) ->
-    oRelyingParty.returnUrl = "http://#{req.headers.host}/_auth"
+    oRelyingParty.returnUrl = "http#{'s' if options.secure}://#{req.headers.host}/_auth"
 
     if req.session.authenticated
       return next()
