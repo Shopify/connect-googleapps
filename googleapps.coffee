@@ -5,7 +5,7 @@ module.exports = (domain, options = {}) ->
   oRelyingParty = new openid.RelyingParty('', null, false, false, oExtensions)
 
   return (req, res, next) ->
-    oRelyingParty.returnUrl = "http#{'s' if options.secure}://#{req.headers.host}/_auth"
+    oRelyingParty.returnUrl = "http#{if options.secure then 's' else ''}://#{req.headers.host}/_auth"
 
     if req.session.authenticated
       return next()
@@ -24,6 +24,7 @@ module.exports = (domain, options = {}) ->
           return res.end()
 
         else
+          console.log(result)
           res.writeHead 403, result.error
           return res.end()
     else

@@ -11,7 +11,7 @@ module.exports = function(domain, options) {
   ];
   oRelyingParty = new openid.RelyingParty('', null, false, false, oExtensions);
   return function(req, res, next) {
-    oRelyingParty.returnUrl = "http" + (options.secure ? 's' : void 0) + "://" + req.headers.host + "/_auth";
+    oRelyingParty.returnUrl = "http" + (options.secure ? 's' : '') + "://" + req.headers.host + "/_auth";
     if (req.session.authenticated) {
       return next();
     }
@@ -30,6 +30,7 @@ module.exports = function(domain, options) {
           req.session.returnTo = null;
           return res.end();
         } else {
+          console.log(result);
           res.writeHead(403, result.error);
           return res.end();
         }
