@@ -16,7 +16,7 @@ module.exports = function(domain, options) {
       return next();
     }
     if (/^\/_auth/.test(req.url)) {
-      return oRelyingParty.verifyAssertion(req, function(result) {
+      return oRelyingParty.verifyAssertion(req, function(error, result) {
         if (result.authenticated) {
           if (result.claimedIdentifier.indexOf(domain) === -1) {
             res.writeHead(403, result.error);
@@ -31,14 +31,14 @@ module.exports = function(domain, options) {
           return res.end();
         } else {
           console.log(result);
-          res.writeHead(403, result.error);
+          res.writeHead(403, "google auth error: " + error);
           return res.end();
         }
       });
     } else {
-      return oRelyingParty.authenticate("https://www.google.com/accounts/o8/site-xrds?hd=" + domain, false, function(authUrl) {
-        if (!authUrl) {
-          res.writeHead(500, 'google auth error');
+      return oRelyingParty.authenticate("https://www.google.com/accounts/o8/site-xrds?hd=" + domain, false, function(error, authUrl) {
+        if (error) {
+          res.writeHead(500, "google auth error: " + error);
           return res.end();
         } else {
           req.session.returnTo = req.url;

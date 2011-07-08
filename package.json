@@ -12,6 +12,6 @@
   },
   "main": "googleapps",
   "dependencies": {
-     "openid": ">=0.1.8"
+     "openid": "0.2.0"
   }
 }

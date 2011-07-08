@@ -11,7 +11,7 @@ module.exports = (domain, options = {}) ->
       return next()
 
     if /^\/_auth/.test(req.url)
-      oRelyingParty.verifyAssertion req, (result) ->
+      oRelyingParty.verifyAssertion req, (error, result) ->
         if result.authenticated
           if result.claimedIdentifier.indexOf(domain) == -1
             res.writeHead 403, result.error
@@ -25,12 +25,12 @@ module.exports = (domain, options = {}) ->
 
         else
           console.log(result)
-          res.writeHead 403, result.error
+          res.writeHead 403, "google auth error: #{error}"
           return res.end()
     else
-      oRelyingParty.authenticate "https://www.google.com/accounts/o8/site-xrds?hd=#{domain}", false, (authUrl) ->
-        if not authUrl
-          res.writeHead 500, 'google auth error'
+      oRelyingParty.authenticate "https://www.google.com/accounts/o8/site-xrds?hd=#{domain}", false, (error, authUrl) ->
+        if error
+          res.writeHead 500, "google auth error: #{error}"
           return res.end()
 
         else
