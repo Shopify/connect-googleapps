@@ -12,7 +12,7 @@ module.exports = (domain, options = {}) ->
 
     if /^\/_auth/.test(req.url)
       oRelyingParty.verifyAssertion req, (result) ->
-        if result.authenticated
+        if result?.authenticated
           if result.claimedIdentifier.indexOf(domain) == -1
             res.writeHead 403, result.error
             return res.end()

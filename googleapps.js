@@ -17,7 +17,7 @@ module.exports = function(domain, options) {
     }
     if (/^\/_auth/.test(req.url)) {
       return oRelyingParty.verifyAssertion(req, function(result) {
-        if (result.authenticated) {
+        if (result != null ? result.authenticated : void 0) {
           if (result.claimedIdentifier.indexOf(domain) === -1) {
             res.writeHead(403, result.error);
             return res.end();
