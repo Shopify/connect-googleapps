@@ -7,7 +7,7 @@ module.exports = (domain, options = {}) ->
   return (req, res, next) ->
     oRelyingParty.returnUrl = "http#{if options.secure then 's' else ''}://#{req.headers.host}/_auth"
 
-    if req.session.authenticated
+    if req.session?.authenticated
       return next()
 
     if /^\/_auth/.test(req.url)

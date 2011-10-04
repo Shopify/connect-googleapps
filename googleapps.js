@@ -1,4 +1,5 @@
-var openid = require('openid');
+var openid;
+openid = require('openid');
 module.exports = function(domain, options) {
   var oExtensions, oRelyingParty;
   if (options == null) {
@@ -11,8 +12,9 @@ module.exports = function(domain, options) {
   ];
   oRelyingParty = new openid.RelyingParty('', null, false, false, oExtensions);
   return function(req, res, next) {
+    var _ref;
     oRelyingParty.returnUrl = "http" + (options.secure ? 's' : '') + "://" + req.headers.host + "/_auth";
-    if (req.session.authenticated) {
+    if ((_ref = req.session) != null ? _ref.authenticated : void 0) {
       return next();
     }
     if (/^\/_auth/.test(req.url)) {
@@ -51,3 +53,4 @@ module.exports = function(domain, options) {
     }
   };
 };
+
