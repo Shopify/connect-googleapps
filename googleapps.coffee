@@ -2,6 +2,7 @@ openid = require('openid')
 
 module.exports = (domain, options = {}) ->
   oExtensions = [new openid.AttributeExchange('http://axschema.org/contact/email': 'required')]
+  hostMetaProxy = (identifier, host) -> 'https://www.google.com/accounts/o8/.well-known/host-meta?hd=' + host
   oRelyingParty = new openid.RelyingParty('', null, false, false, oExtensions)
 
   return (req, res, next) ->
