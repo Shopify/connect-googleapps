@@ -2,20 +2,19 @@ openid = require('openid')
 
 module.exports = (domain, options = {}) ->
   oExtensions = [new openid.AttributeExchange('http://axschema.org/contact/email': 'required')]
-  hostMetaProxy = (identifier, host) -> 'https://www.google.com/accounts/o8/.well-known/host-meta?hd=' + host
-  oRelyingParty = new openid.RelyingParty('', null, false, false, oExtensions)
+  oRelyingParty = new openid.RelyingParty('', null, true, false, oExtensions)
 
   return (req, res, next) ->
     oRelyingParty.returnUrl = "http#{if options.secure then 's' else ''}://#{req.headers.host}/_auth"
 
-    if req.session?.authenticated
+    if req.session.authenticated
       return next()
 
     if /^\/_auth/.test(req.url)
-      oRelyingParty.verifyAssertion req, (result) ->
+      oRelyingParty.verifyAssertion req, (error, result) ->
         if result?.authenticated
           if result.claimedIdentifier.indexOf(domain) == -1
-            res.writeHead 403, result.error
+            res.writeHead 403, error
             return res.end()
 
           req.session.authenticated = true
@@ -26,10 +25,10 @@ module.exports = (domain, options = {}) ->
 
         else
           console.log(result)
-          res.writeHead 403, result.error
+          res.writeHead 403, error
           return res.end()
     else
-      oRelyingParty.authenticate "https://www.google.com/accounts/o8/site-xrds?hd=#{domain}", false, (authUrl) ->
+      oRelyingParty.authenticate "https://www.google.com/accounts/o8/site-xrds?hd=#{domain}", false, (error, authUrl) ->
         if not authUrl
           res.writeHead 500, 'google auth error'
           return res.end()
