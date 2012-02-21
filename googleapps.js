@@ -2,7 +2,7 @@
   var openid;
   openid = require('openid');
   module.exports = function(domain, options) {
-    var hostMetaProxy, oExtensions, oRelyingParty;
+    var oExtensions, oRelyingParty;
     if (options == null) {
       options = {};
     }
@@ -11,21 +11,17 @@
         'http://axschema.org/contact/email': 'required'
       })
     ];
-    hostMetaProxy = function(identifier, host) {
-      return 'https://www.google.com/accounts/o8/.well-known/host-meta?hd=' + host;
-    };
-    oRelyingParty = new openid.RelyingParty('', null, false, false, oExtensions);
+    oRelyingParty = new openid.RelyingParty('', null, true, false, oExtensions);
     return function(req, res, next) {
-      var _ref;
       oRelyingParty.returnUrl = "http" + (options.secure ? 's' : '') + "://" + req.headers.host + "/_auth";
-      if ((_ref = req.session) != null ? _ref.authenticated : void 0) {
+      if (req.session.authenticated) {
         return next();
       }
       if (/^\/_auth/.test(req.url)) {
-        return oRelyingParty.verifyAssertion(req, function(result) {
+        return oRelyingParty.verifyAssertion(req, function(error, result) {
           if (result != null ? result.authenticated : void 0) {
             if (result.claimedIdentifier.indexOf(domain) === -1) {
-              res.writeHead(403, result.error);
+              res.writeHead(403, error);
               return res.end();
             }
             req.session.authenticated = true;
@@ -37,12 +33,12 @@
             return res.end();
           } else {
             console.log(result);
-            res.writeHead(403, result.error);
+            res.writeHead(403, error);
             return res.end();
           }
         });
       } else {
-        return oRelyingParty.authenticate("https://www.google.com/accounts/o8/site-xrds?hd=" + domain, false, function(authUrl) {
+        return oRelyingParty.authenticate("https://www.google.com/accounts/o8/site-xrds?hd=" + domain, false, function(error, authUrl) {
           if (!authUrl) {
             res.writeHead(500, 'google auth error');
             return res.end();
