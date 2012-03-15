@@ -19,6 +19,7 @@ module.exports = (domain, options = {}) ->
 
           req.session.authenticated = true
           req.session.user = result.email
+          req.session.claimedIdentifier = result.claimedIdentifier
           res.writeHead 302, Location: req.session.returnTo || '/'
           req.session.returnTo = null
           return res.end()
