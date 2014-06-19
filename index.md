@@ -1,3 +1,7 @@
+---
+layout: index
+---
+
 # connect-googleapps
 
 Google Apps OpenID authentication middleware for Connect/Node.js.
