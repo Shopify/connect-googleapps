@@ -29,4 +29,4 @@ Make sure you are using a session middleware.
     
 ## License
 
-Unless otherwise noted, all code is released under the [MIT-LICENSE](http://opensource.org/licenses/MIT).
+Copyright (c) 2011 Shopify. Released under the [MIT-LICENSE](http://opensource.org/licenses/MIT).
