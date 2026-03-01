@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/Shopify/connect-googleapps.png)](http://travis-ci.org/Shopify/connect-googleapps)
 # connect-googleapps
 
 Google Apps OpenID authentication middleware for Connect/Node.js.
